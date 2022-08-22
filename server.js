@@ -1,7 +1,11 @@
 import express from 'express';
-import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import connectDb from './config/mongDb.js';
+
+// Import Routes
+import userRoutes from './routes/userRoutes.js';
+import authRoutes from './routes/authRoutes.js';
 
 dotenv.config();
 
@@ -15,12 +19,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // MongoDB Connection
-mongoose
-   .connect(process.env.MONGO_URI)
-   .then((conn) =>
-      console.log(`MongoDB connected with :${conn.connection.host}`)
-   )
-   .catch((err) => console.log(`An error occured...`));
+connectDb();
+
+// API Routes
+app.use('/api/users', userRoutes);
+app.use('/api/auth', authRoutes);
 
 const PORT = process.env.PORT || 5000;
 
