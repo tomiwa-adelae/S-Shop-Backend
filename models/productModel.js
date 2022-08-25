@@ -44,12 +44,12 @@ const productSchema = new mongoose.Schema(
          default: 'There is no description for this product!',
       },
       price: {
-         type: String,
+         type: Number,
          required: true,
          default: '0',
       },
       discountPrice: {
-         type: String,
+        type: Number,
          default: '0',
       },
       currentDiscount: {
