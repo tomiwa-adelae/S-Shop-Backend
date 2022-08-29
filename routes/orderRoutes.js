@@ -6,6 +6,9 @@ const router = express.Router()
 import Order from '../models/orderModel.js'
 import User from '../models/userModel.js'
 
+// Import Auth middleware
+import {auth} from '../middleware/auth.js'
+
 // Get all orders
 // GET @/api/orders
 // Private
@@ -32,7 +35,8 @@ router.get('/:id', async(req, res) => {
 
 		res.status(200).json({order, orderUser})
 	}catch(err){
-		res.status(500).json({ msg: 'An error occured!' })
+		console.log(err)
+		// res.status(500).json({ msg: 'An error occured!' })
 	}
 })
 
@@ -40,7 +44,7 @@ router.get('/:id', async(req, res) => {
 // Create an order
 // POST @/api/orders
 // Private
-router.post('/', async(req, res) => {
+router.post('/', auth, async(req, res) => {
 	try{
 		const { user, cartItems, paymentMethod, location, totalPrice } = req.body
 
