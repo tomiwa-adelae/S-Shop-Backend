@@ -25,7 +25,7 @@ router.get('/', async(req, res) => {
 // Get a single order by Id
 // GET @/api/orders/:id
 // Private
-router.get('/:id', async(req, res) => {
+router.get('/:id', auth, async(req, res) => {
 	try{
 		const order = await Order.findById(req.params.id)
 
@@ -63,6 +63,19 @@ router.post('/', auth, async(req, res) => {
 		res.status(201).json({
 			orderUser, order
 		})
+	}catch(err){
+		res.status(500).json({ msg: 'An error occured!' })
+	}
+})
+
+// Get my orders
+// GET @/api/orders/myorders/mine
+// Private
+router.get('/myorders/mine',auth, async(req, res) => {
+	try{
+		const orders = await Order.find({ user: req.user.id }).sort({ createdAt: -1 }).limit(10)
+		res.status(200).json(orders)
+		
 	}catch(err){
 		res.status(500).json({ msg: 'An error occured!' })
 	}

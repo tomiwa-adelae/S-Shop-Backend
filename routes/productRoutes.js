@@ -130,4 +130,13 @@ router.post('/', async (req, res) => {
       res.status(500).json({ msg: 'An error occured! Product not created!' });
    }
 });
+
+// Create customer reviews
+// POST @/api/products/:id/reviews
+// Private
+router.post('/:id/reviews', auth, async(req, res) => {
+   const {comment, rating, firstName, lastName} = req.body
+
+   console.log(req.body)
+})
 export default router;
