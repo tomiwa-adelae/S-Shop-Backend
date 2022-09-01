@@ -23,7 +23,6 @@ router.post('/', async (req, res) => {
          password,
          confirmPassword,
          isAdmin,
-         isSShopAdmin,
       } = req.body;
 
       //   Check if User exist already

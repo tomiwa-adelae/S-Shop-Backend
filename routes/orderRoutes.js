@@ -73,7 +73,7 @@ router.post('/', auth, async(req, res) => {
 // Private
 router.get('/myorders/mine',auth, async(req, res) => {
 	try{
-		const orders = await Order.find({ user: req.user.id }).sort({ createdAt: -1 }).limit(10)
+		const orders = await Order.find({ user: req.user.id }).sort({ createdAt: -1 })
 		res.status(200).json(orders)
 		
 	}catch(err){
