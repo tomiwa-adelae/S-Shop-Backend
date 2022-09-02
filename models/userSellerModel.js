@@ -15,18 +15,15 @@ const userSellerSchema = new mongoose.Schema(
          required: true,
          trim: true,
       },
-      additionalPhoneNumber: {
-         type: String,
-         trim: true,
-      },
       brandName: {
          type: String,
       },
-      brandLogo:{
+      brandLogo: {
          type: String,
+         default: 'https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg'
       },
-      brandLogoId:{
-            type: String
+      brandLogoId: {
+         type: String
       },
       accountNumber: {
          type: String,
@@ -38,10 +35,6 @@ const userSellerSchema = new mongoose.Schema(
       },
       nameOfAccountHolder: {
          type: String, required: true
-      },
-      picture: {
-         type: String,
-         default: 'https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg'
       },
       email: {
          type: String,

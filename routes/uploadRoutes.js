@@ -1,3 +1,4 @@
+
 import express from 'express'
 import cloudinary from '../middleware/cloudinary.js';
 
@@ -20,7 +21,6 @@ router.post('/', async(req, res) => {
 			brandLogoId: uploadResponse.public_id
 		})
 	}catch(err){
-		console.log(err)
 		res.status(500).json({ msg: 'Something went wrong! Image not uploaded!' })
 	}
 })

@@ -30,14 +30,19 @@ const productSchema = new mongoose.Schema(
          type: String,
          required: true,
       },
-      image: {
+      productImage: {
          type: String,
          required: true,
          default:
             'https://thumbs.dreamstime.com/b/simple-vector-red-scratch-rubber-stamp-sample-transparent-effect-background-155834864.jpg',
       },
-      imageId: {
-         type: String,
+       productImageId: {
+         type: String
+      },
+      sellerId: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+      ref: 'User',
       },
       description: {
          type: String,

@@ -20,7 +20,7 @@ router.get('/', async (req, res) => {
                     },
                  },
                  {
-                    image: {
+                    productImage: {
                        $regex: req.query.keyword,
                        $options: 'i',
                     },
@@ -164,35 +164,6 @@ router.get('/:id', async (req, res) => {
       res.status(200).json(product);
    } catch (err) {
       res.status(500).json({ msg: 'An error occured! Please try again!' });
-   }
-});
-
-// Create a new product as an admin
-// PORT @/api/products
-// Private
-router.post('/', async (req, res) => {
-   try {
-      const { name, image, price, imageId, description, brand, category } =
-         req.body;
-
-      if (!name || !price)
-         return res.status(400).json({ msg: 'Please enter all fields!' });
-
-      const newProduct = new Product({
-         name,
-         image,
-         price,
-         imageId,
-         description,
-         brand,
-         category,
-      });
-
-      const product = await newProduct.save();
-
-      res.send(product);
-   } catch (err) {
-      res.status(500).json({ msg: 'An error occured! Product not created!' });
    }
 });
 
