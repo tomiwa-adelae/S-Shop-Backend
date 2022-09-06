@@ -12,6 +12,8 @@ import uploadRoutes from './routes/uploadRoutes.js';
 import userSellerRoutes from './routes/userSellerRoutes.js';
 import authSellerRoutes from './routes/authSellerRoutes.js';
 import sellerProductRoutes from './routes/sellerProductRoutes.js';
+import sellerOrderRoutes from './routes/sellerOrderRoutes.js';
+
 
 
 dotenv.config();
@@ -39,6 +41,7 @@ app.use('/api/uploads', uploadRoutes);
 app.use('/api/users/sellers', userSellerRoutes);
 app.use('/api/auth/sellers', authSellerRoutes);
 app.use('/api/seller/products', sellerProductRoutes);
+app.use('/api/sellers/orders', sellerOrderRoutes);
 
 
 

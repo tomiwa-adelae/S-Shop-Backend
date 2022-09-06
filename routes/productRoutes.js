@@ -55,19 +55,6 @@ router.get('/', async (req, res) => {
    }
 });
 
-// Get 10 latest products
-// GET @/api/products/latest
-// Public
-// router.get('/latest', async (req, res) => {
-//    try {
-//       const products = await Product.find().sort({ createdAt: -1 }).limit(10);
-
-//       res.status(200).json(products);
-//    } catch (err) {
-//       res.status(500).json({ msg: 'An error occured!' });
-//    }
-// });
-
 // Get most rated products
 // Get @/api/products/most/rated/products
 // Public

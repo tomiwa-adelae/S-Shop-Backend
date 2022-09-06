@@ -6,6 +6,7 @@ const router = express.Router();
 
 // Import Seller user Model
 import UserSeller from '../models/userSellerModel.js';
+import User from '../models/userModel.js';
 
 import generateToken from '../utils/generateToken.js';
 
@@ -116,6 +117,7 @@ router.post('/', async (req, res) => {
                            email: seller.email,
                            phoneNumber: seller.phoneNumber,
                            isAdmin: seller.isAdmin,
+                           isSShopAdmin: seller.isSShopAdmin,
                            brandName: seller.brandName,
                            brandLogo: seller.brandLogo,
                            brandLogoId: seller.brandLogoId,
@@ -164,6 +166,7 @@ router.post('/', async (req, res) => {
                            email: seller.email,
                            phoneNumber: seller.phoneNumber,
                            isAdmin: seller.isAdmin,
+                           isSShopAdmin: seller.isSShopAdmin,
                            brandName: seller.brandName,
                            accountNumber: seller.accountNumber,
                            bankName: seller.bankName,
@@ -211,7 +214,7 @@ router.put('/profile', auth, async(req, res) => {
                upload_preset: 'sshop'
             })
 
-         await cloudinary.uploader.destroy(
+         if(user.brandLogoId) return await cloudinary.uploader.destroy(
             user.brandLogoId,
             { invalidate: true },
             {
@@ -235,6 +238,7 @@ router.put('/profile', auth, async(req, res) => {
                   email: savedUser.email,
                   phoneNumber: savedUser.phoneNumber,
                   isAdmin: savedUser.isAdmin,
+                  isSShopAdmin: savedUser.isSShopAdmin,
                   brandName: savedUser.brandName,
                   brandLogo: savedUser.brandLogo,
                   brandLogoId: savedUser.brandLogoId,
@@ -260,6 +264,7 @@ router.put('/profile', auth, async(req, res) => {
                   email: savedUser.email,
                   phoneNumber: savedUser.phoneNumber,
                   isAdmin: savedUser.isAdmin,
+                  isSShopAdmin: savedUser.isSShopAdmin,
                   brandName: savedUser.brandName,
                   brandLogo: savedUser.brandLogo,
                   brandLogoId: savedUser.brandLogoId,
@@ -274,5 +279,120 @@ router.put('/profile', auth, async(req, res) => {
    }
 })
 
+
+
+// Update user login details
+// PUT @/api/users/seller/profile/login
+// Private
+router.put('/profile/login', auth, async(req, res) => {
+   try{
+      const {currentPassword, newPassword, retypePassword} = req.body
+
+      const user = await UserSeller.findById(req.user.id)
+
+      if(!user) return res.status(404).json({ msg: 'Seller does not exist! An error occured!' })
+
+         if(!currentPassword || !newPassword || !retypePassword) return res.status(409).json({ msg: 'Please enter all fields!' })
+
+     bcrypt.compare(currentPassword, user.password)
+  .then(isMatch => {
+   if(!isMatch) return res.status(409).json({ msg: 'Invalid current password!' })
+
+      if(newPassword.length <= 5) return res.status(400).json({
+            msg: 'New password should be at least 6 character long!',
+         });
+
+      if(newPassword !== retypePassword) return res.status(409).json({ msg: 'Passwords do not match!' })
+
+      user.password = newPassword
+
+   //   Hash user password
+      bcrypt.genSalt(14, (err, salt) => {
+         bcrypt.hash(user.password, salt, (err, hash) => {
+            if (err) throw err;
+
+            // Setting newUser password to the hash password
+            user.password = hash;
+
+            // Save new user to DB
+            user
+               .save()
+               .then((user) => {
+                  // Generate JWT Tokem
+                  const token = generateToken(user);
+                  res.status(201).json({
+                     token,
+                     seller: {
+                  id: user._id,
+                  firstName: user.firstName,
+                  lastName: user.lastName,
+                  email: user.email,
+                  phoneNumber: user.phoneNumber,
+                  isAdmin: user.isAdmin,
+                  isSShopAdmin: user.isSShopAdmin,
+                  brandName: user.brandName,
+                  brandLogo: user.brandLogo,
+                  brandLogoId: user.brandLogoId,
+                  accountNumber: user.accountNumber,
+                  bankName: user.bankName,
+                  nameOfAccountHolder: user.nameOfAccountHolder,             
+               },
+                  });
+               })
+               .catch((err) =>
+                  res
+                     .status(500)
+                     .json({ msg: 'An error occured! Please try again!' })
+               );
+         });
+      })
+  })
+
+   }catch(err){
+      res.status(500).json({ msg: 'An error occured! Please try again!' });
+   }
+})
+
+// Get all users
+// GET @/api/users/seller
+// Private
+router.get('/', auth, async (req, res) => {
+   try{
+      const users = await User.find().sort({ createdAt: -1 })
+
+      res.status(200).json(users)
+   }catch(err){
+      res.status(500).json({ msg: 'An error occured!' })
+   }
+})
+
+
+// Get all sellers
+// GET @/api/users/seller/
+// Private
+router.get('/all/sellers', auth, async (req, res) => {
+   try{
+      const sellers = await UserSeller.find().sort({ createdAt: -1 })
+
+      res.status(200).json(sellers)
+   }catch(err){
+      res.status(500).json({ msg: 'An error occured!' })
+   }
+})
+
+// Get a single seller by Id
+// Get @/api/users/sellers/:id
+// Private
+router.get('/:id', auth, async(req, res) => {
+   try{
+      const seller = await UserSeller.findById(req.params.id)
+
+      if(!seller) return res.status(404).json({ msg: 'Seller not found! An error occured!' })
+
+      res.status(200).json(seller)
+   }catch(err){
+      res.status(500).json({ msg: 'An error occured!' })
+   }
+})
 
 export default router;

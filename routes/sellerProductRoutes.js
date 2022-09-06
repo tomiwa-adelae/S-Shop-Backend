@@ -22,6 +22,21 @@ router.get('/', auth, async (req, res) => {
    }
 });
 
+
+// Get all products
+// GET @/api/seller/products/admin/products
+// Private
+router.get('/admin/products', auth, async (req, res) => {
+   try {
+
+      const products = await Product.find().sort({ createdAt: -1 });
+
+      res.status(200).json(products);
+   } catch (err) {
+      res.status(500).json({ msg: 'An error occured!' });
+   }
+});
+
 // Get a single product
 // Get @/api/seller/products/:id
 // Private
@@ -30,6 +45,22 @@ router.get('/:id',auth,  async (req, res) => {
        const sellerId = req.user.id._id;
 
       const product = await Product.findOne({ sellerId: sellerId, _id: req.params.id});
+
+      if (!product) return res.status(404).json({ msg: 'Product not found!' });
+
+      res.status(200).json(product);
+   } catch (err) {
+      res.status(500).json({ msg: 'An error occured! Please try again!' });
+   }
+});
+
+
+// Get a single product
+// Get @/api/seller/products/:id/admin/product
+// Private
+router.get('/:id/admin/product',auth,  async (req, res) => {
+   try {
+      const product = await Product.findOne( {_id: req.params.id});
 
       if (!product) return res.status(404).json({ msg: 'Product not found!' });
 
@@ -53,7 +84,6 @@ router.post('/', auth, async (req, res) => {
             .status(400)
             .json({ msg: 'Please fill the asterisked fields!' });
 
-      if (productImage) {
          const uploadResponse = await cloudinary.v2.uploader.upload(productImage, {
             upload_preset: 'sshop',
          });
@@ -74,22 +104,8 @@ router.post('/', auth, async (req, res) => {
          const product = await newProduct.save()
 
          res.status(201).json(product)
-      } else {
-         const newProduct = new Product({
-            name,
-            price,
-            category,
-            brand,
-            description,
-            sellerId: req.user.id,
-         });
-
-         // Save product to DB
-         const product = await newProduct.save()
-
-         res.status(201).json(product)
-      }
    } catch (err) {
+      console.log(err)
       res.status(500).json({ msg: 'An error occured!' });
    }
 });
@@ -118,7 +134,7 @@ router.put('/:id', auth, async (req, res) => {
                upload_preset: 'sshop',
             });
 
-         if(product.productImageId) return await cloudinary.uploader.destroy(
+            await cloudinary.uploader.destroy(
                product.productImageId,
                { invalidate: true },
                {

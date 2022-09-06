@@ -36,7 +36,7 @@ router.get('/:id', auth, async(req, res) => {
 		res.status(200).json({order, orderUser})
 	}catch(err){
 		console.log(err)
-		// res.status(500).json({ msg: 'An error occured!' })
+		res.status(500).json({ msg: 'An error occured!' })
 	}
 })
 
@@ -64,6 +64,7 @@ router.post('/', auth, async(req, res) => {
 			orderUser, order
 		})
 	}catch(err){
+		console.log(err)
 		res.status(500).json({ msg: 'An error occured!' })
 	}
 })

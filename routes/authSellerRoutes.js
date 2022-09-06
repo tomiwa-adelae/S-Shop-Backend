@@ -50,13 +50,13 @@ router.post('/', async (req, res) => {
                   phoneNumber: seller.phoneNumber,
                   additionalPhoneNumber: seller.additionalPhoneNumber,
                   isAdmin: seller.isAdmin,
+                  isSShopAdmin: seller.isSShopAdmin,
                   brandName: seller.brandName,
                   brandLogo: seller.brandLogo,
                   brandLogoId: seller.brandLogoId,
                   accountNumber: seller.accountNumber,
                   bankName: seller.bankName,
                   nameOfAccountHolder: seller.nameOfAccountHolder,
-                  picture: seller.picture,
                },
             });
       })
