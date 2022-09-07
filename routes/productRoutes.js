@@ -47,7 +47,9 @@ router.get('/', async (req, res) => {
            }
          : {};
 
-      const products = await Product.find({...keyword}).sort({ createdAt: -1 });
+      const products = await Product.find({ ...keyword }).sort({
+         createdAt: -1,
+      });
 
       res.status(200).json(products);
    } catch (err) {
@@ -157,7 +159,6 @@ router.get('/:id', async (req, res) => {
 // Create customer reviews
 // POST @/api/products/:id/reviews
 // Private
-
 router.post('/:id/reviews', auth, async (req, res) => {
    try {
       const { comment, rating, firstName, lastName } = req.body;
