@@ -169,8 +169,6 @@ router.put('/profile/login', auth, async(req, res) => {
             // Setting newUser password to the hash password
             user.password = hash;
 
-            console.log(user)
-
             // Save new user to DB
             user
                .save()
