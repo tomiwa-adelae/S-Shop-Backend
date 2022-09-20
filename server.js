@@ -31,6 +31,10 @@ app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/uploads', uploadRoutes);
 
+app.get('/', (req, res) => {
+   res.send('APP IS RUNNING');
+});
+
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => console.log(`Server started on PORT ${PORT}...`));
