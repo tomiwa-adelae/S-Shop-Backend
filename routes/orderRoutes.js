@@ -9,19 +9,6 @@ import User from '../models/userModel.js';
 // Import Auth middleware
 import { auth } from '../middleware/auth.js';
 
-// Get all orders
-// GET @/api/orders
-// Private
-router.get('/', async (req, res) => {
-   try {
-      const orders = await Order.find().sort({ createdAt: -1 });
-
-      res.status(200).json(orders);
-   } catch (err) {
-      res.status(500).json({ msg: 'An error occured!' });
-   }
-});
-
 // Get a single order by Id
 // GET @/api/orders/:id
 // Private
