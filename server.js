@@ -14,12 +14,12 @@ dotenv.config();
 
 const app = express();
 
-// Cross origin requests
-app.use(cors());
-
 // Express body parser
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true }));
+
+// Cross origin requests
+app.use(cors());
 
 // MongoDB Connection
 connectDb();
