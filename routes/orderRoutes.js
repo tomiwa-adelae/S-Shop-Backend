@@ -79,4 +79,26 @@ router.get('/myorders/mine', auth, async (req, res) => {
    }
 });
 
+// Pay with card
+// GET @/api/orders/pay/card/now
+// Private
+router.post('/pay/card/now', auth, async (req, res) => {
+   try {
+      const { id } = req.body;
+      const existingOrder = await Order.findById(id);
+
+      if (!existingOrder)
+         return res.status(404).json({ msg: 'An error occured!' });
+
+      existingOrder.isPaid = true;
+      existingOrder.paidAt = Date.now();
+
+      const order = await existingOrder.save();
+
+      res.status(200).json({ order });
+   } catch (err) {
+      res.status(500).json({ msg: 'An error occured!' });
+   }
+});
+
 export default router;
